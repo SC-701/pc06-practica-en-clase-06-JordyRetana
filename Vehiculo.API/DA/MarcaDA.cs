@@ -1,31 +1,34 @@
 ﻿using Abstracciones.Interfaces.DA;
 using Abstracciones.Modelos;
-using Microsoft.Data.SqlClient;
 using Dapper;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace DA
 {
     public class MarcaDA : IMarcaDA
     {
-        private IRepositorioDapper _repositorioDapper;
-        private SqlConnection _sqlConnection;
-
+        private readonly IRepositorioDapper _repositorioDapper;
 
         public MarcaDA(IRepositorioDapper repositorioDapper)
         {
             _repositorioDapper = repositorioDapper;
-            _sqlConnection = _repositorioDapper.ObtenerRepositorio();
         }
 
         #region Operaciones
         public async Task<IEnumerable<Marca>> Obtener()
         {
-            string query = @"ObtenerMarcas";
-            var resultadoConsulta = await _sqlConnection.QueryAsync<Marca>(query);
+            const string sp = "ObtenerMarcas";
+
+            using SqlConnection sql = _repositorioDapper.ObtenerRepositorio();
+
+            var resultadoConsulta = await sql.QueryAsync<Marca>(
+                sp,
+                commandType: CommandType.StoredProcedure
+            );
+
             return resultadoConsulta;
         }
-
- 
         #endregion
     }
 }

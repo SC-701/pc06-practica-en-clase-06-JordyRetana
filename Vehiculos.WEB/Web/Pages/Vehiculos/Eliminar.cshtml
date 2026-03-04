@@ -1,91 +1,74 @@
 ﻿@page
 @model Web.Pages.Vehiculos.EliminarModel
 @{
+    ViewData["Title"] = "Eliminar Vehículo";
 }
-<header class="subhead">
-    <div class="container">
+
+<header class="subhead py-4">
+    <div class="container text-center">
         <div class="masthead-subheading">SC-701: Programación Web Avanzada</div>
-        <div class="masthead-heading text-uppercase">Examen vehiculo</div>
+        <h1 class="masthead-heading text-uppercase mb-0">Eliminar Vehículo</h1>
+        <p class="text-muted mb-0">Confirma antes de eliminar.</p>
     </div>
 </header>
-<section class="page-section bg-light" id="principal">
+
+<section class="page-section bg-light py-5" id="principal">
     <div class="container">
-        <div class="container">
-            <div class="text-center">
-                <h2 class="section-heading text-uppercase">Eliminar vehiculo</h2>
-                <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
-            </div>
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-lg-7 col-md-9 col-sm-11">
 
-            <div class="col-xl-5 col-lg-6 col-md-8 col-sm-10 mx-auto ">
-                <form method="post">
-                    <row>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.vehiculo.Marca):
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.vehiculo.Marca)
-                        </dd>
-                    </row>
-                    <row>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.vehiculo.Modelo):
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.vehiculo.Modelo)
-                        </dd>
-                    </row>
-                    <row>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.vehiculo.Placa):
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.vehiculo.Placa)
-                        </dd>
-                    </row>
-                    <row>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.vehiculo.Anio):
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.vehiculo.Anio)
-                        </dd>
-                    </row>
-                    <row>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.vehiculo.Color):
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.vehiculo.Color)
-                        </dd>
-                    </row>               <row>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.vehiculo.CorreoPropietario):
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.vehiculo.CorreoPropietario)
-                        </dd>
-                    </row>
-                    </row>               <row>
-                        <dt>
-                            @Html.DisplayNameFor(model => model.vehiculo.TelefonoPropietario):
-                        </dt>
-                        <dd>
-                            @Html.DisplayFor(model => model.vehiculo.TelefonoPropietario)
-                        </dd>
-                    </row>
-                    <div class="form-group">
-                        <a class="btn btn-primary" asp-page="./Index">Cancelar</a>
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="alert alert-danger d-flex align-items-start gap-2">
+                            <i class="bi bi-exclamation-triangle-fill mt-1"></i>
+                            <div>
+                                <div class="fw-semibold">Acción irreversible</div>
+                                <div class="small">Este registro se eliminará permanentemente.</div>
+                            </div>
+                        </div>
+
+                        <h2 class="h5 mb-3">Datos del vehículo</h2>
+
+                        <dl class="row mb-4">
+                            <dt class="col-sm-4">Marca</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(m => m.vehiculo.Marca)</dd>
+
+                            <dt class="col-sm-4">Modelo</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(m => m.vehiculo.Modelo)</dd>
+
+                            <dt class="col-sm-4">Placa</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(m => m.vehiculo.Placa)</dd>
+
+                            <dt class="col-sm-4">Año</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(m => m.vehiculo.Anio)</dd>
+
+                            <dt class="col-sm-4">Color</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(m => m.vehiculo.Color)</dd>
+
+                            <dt class="col-sm-4">Correo</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(m => m.vehiculo.CorreoPropietario)</dd>
+
+                            <dt class="col-sm-4">Teléfono</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(m => m.vehiculo.TelefonoPropietario)</dd>
+                        </dl>
+
+                        <form method="post" class="d-flex gap-2 justify-content-end">
+                            <a class="btn btn-outline-secondary" asp-page="./Index">Cancelar</a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash3 me-1"></i> Eliminar
+                            </button>
+
+                            <input type="hidden" asp-for="vehiculo.Marca" />
+                            <input type="hidden" asp-for="vehiculo.Modelo" />
+                            <input type="hidden" asp-for="vehiculo.Placa" />
+                            <input type="hidden" asp-for="vehiculo.TelefonoPropietario" />
+                            <input type="hidden" asp-for="vehiculo.CorreoPropietario" />
+                            <input type="hidden" asp-for="vehiculo.Color" />
+                            <input type="hidden" asp-for="vehiculo.Anio" />
+                        </form>
                     </div>
+                </div>
 
-                    <input type="hidden" asp-for="vehiculo.Marca" />
-                    <input type="hidden" asp-for="vehiculo.Modelo" />
-                    <input type="hidden" asp-for="vehiculo.Placa" />
-                    <input type="hidden" asp-for="vehiculo.TelefonoPropietario" />
-                    <input type="hidden" asp-for="vehiculo.CorreoPropietario" />
-                    <input type="hidden" asp-for="vehiculo.Color" />
-                    <input type="hidden" asp-for="vehiculo.Anio" />
-                </form>
             </div>
         </div>
     </div>

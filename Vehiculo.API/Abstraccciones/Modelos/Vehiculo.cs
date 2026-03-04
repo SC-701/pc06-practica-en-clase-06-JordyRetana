@@ -6,8 +6,9 @@ namespace Abstracciones.Modelos
 {
     public class VehiculoBase
     {
-        [RegularExpression(@"^(\d{3}-[A-Za-z]{3}|[A-Za-z]{3}-\d{3})$",
-        ErrorMessage = "El formato de la placa debe ser ###-ABC o ABC-### (Ej: 123-ABC o ABC-123)")]
+        [Required(ErrorMessage = "La propiedad placa es requerida")]
+        [RegularExpression(@"^\d{3}-[A-Za-z]{3}$", ErrorMessage = "El formato de la placa debe ser ###-ABC (Ej: 123-ABC)")]
+        [DisplayName("Placa")]
         public string Placa { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La propiedad color es requerida")]
@@ -45,7 +46,6 @@ namespace Abstracciones.Modelos
     public class VehiculoResponse : VehiculoBase
     {
         public Guid Id { get; set; }
-
         public string? Modelo { get; set; }
         public string? Marca { get; set; }
     }

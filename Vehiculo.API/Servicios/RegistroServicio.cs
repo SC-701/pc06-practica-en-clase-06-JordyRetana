@@ -2,9 +2,7 @@
 using Abstracciones.Interfaces.Servicios;
 using Abstracciones.Modelos;
 using Microsoft.Extensions.Logging;
-using System.Net.Http;
 using System.Text.Json;
-
 
 namespace Servicios
 {
@@ -21,22 +19,25 @@ namespace Servicios
             _logger = logger;
         }
 
-        public async Task<Propietario> Obtener(string placa)
+        public async Task<Propietario?> Obtener(string placa)
         {
             try
             {
                 var endpoint = _configuracion.ObtenerMetodo("ApiEndPointsRegistro", "ObtenerRegistro");
+
                 var servicioRegistro = _httpClient.CreateClient("ServicioRegistro");
-                var respuesta = await servicioRegistro.GetAsync(string.Format(endpoint, placa));
+                var respuesta = await servicioRegistro.GetAsync(endpoint);
                 respuesta.EnsureSuccessStatusCode();
-                var resultado = await respuesta.Content.ReadAsStringAsync();
+                var json = await respuesta.Content.ReadAsStringAsync();
                 var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var resultadoDeserializado = JsonSerializer.Deserialize<List<Propietario>>(resultado, opciones);
-                return resultadoDeserializado.FirstOrDefault();
+                var lista = JsonSerializer.Deserialize<List<Propietario>>(json, opciones) ?? new List<Propietario>();
+                return lista.FirstOrDefault(x =>
+                    !string.IsNullOrWhiteSpace(x.Placa) &&
+                    string.Equals(x.Placa, placa, StringComparison.OrdinalIgnoreCase));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,"Error al consultar el registro");
+                _logger.LogError(ex, "Error al consultar el registro");
                 return null;
             }
         }

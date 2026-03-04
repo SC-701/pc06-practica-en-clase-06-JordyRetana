@@ -2,9 +2,7 @@
 using Abstracciones.Interfaces.Servicios;
 using Abstracciones.Modelos;
 using Microsoft.Extensions.Logging;
-using System.Net.Http;
 using System.Text.Json;
-
 
 namespace Servicios
 {
@@ -21,25 +19,26 @@ namespace Servicios
             _logger = logger;
         }
 
-        public async Task<Revision> Obtener(string placa)
+        public async Task<Revision?> Obtener(string placa)
         {
             try
             {
                 var endpoint = _configuracion.ObtenerMetodo("ApiEndPointsRevision", "ObtenerRevision");
                 var servicioRevision = _httpClient.CreateClient("ServicioRevision");
-                var respuesta = await servicioRevision.GetAsync(string.Format(endpoint, placa));
+                var respuesta = await servicioRevision.GetAsync(endpoint);
                 respuesta.EnsureSuccessStatusCode();
-                var resultado = await respuesta.Content.ReadAsStringAsync();
+                var json = await respuesta.Content.ReadAsStringAsync();
                 var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var resultadoDeserializado = JsonSerializer.Deserialize<List<Revision>>(resultado, opciones);
-                return resultadoDeserializado.FirstOrDefault();
+                var lista = JsonSerializer.Deserialize<List<Revision>>(json, opciones) ?? new List<Revision>();
+                return lista.FirstOrDefault(x =>
+                    !string.IsNullOrWhiteSpace(x.Placa) &&
+                    string.Equals(x.Placa, placa, StringComparison.OrdinalIgnoreCase));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al consultar el registro");
+                _logger.LogError(ex, "Error al consultar la revision");
                 return null;
             }
-
         }
     }
 }
