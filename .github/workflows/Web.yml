@@ -6,10 +6,8 @@ env:
 
 on:
   push:
-    branches: [ "main" ]
-    paths:
-      - 'Vehiculos.WEB/**'
-  workflow_dispatch:
+    branches: [ "main" ]  # Se ejecuta en cualquier push a main
+  workflow_dispatch:       # Permite ejecución manual
 
 permissions:
   contents: read
