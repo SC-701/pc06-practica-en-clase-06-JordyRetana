@@ -10,7 +10,7 @@ on:
     branches: [ "main" ]
     paths-ignore:
       - 'Vehiculo.API/BD/**'
-      - 'Vehiculo.WEB/**'
+      - 'Vehiculos.WEB/**'
 
   workflow_dispatch:
 
