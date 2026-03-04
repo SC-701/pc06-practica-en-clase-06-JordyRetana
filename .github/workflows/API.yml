@@ -1,28 +1,9 @@
-# This workflow will build and push a .NET Core app to an Azure Web App when a commit is pushed to your default branch.
-#
-# This workflow assumes you have already created the target Azure App Service web app.
-# For instructions see https://docs.microsoft.com/en-us/azure/app-service/quickstart-dotnetcore?tabs=net60&pivots=development-environment-vscode
-#
-# To configure this workflow:
-#
-# 1. Download the Publish Profile for your Azure Web App. You can download this file from the Overview page of your Web App in the Azure Portal.
-#    For more information: https://docs.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel#generate-deployment-credentials
-#
-# 2. Create a secret in your repository named AZURE_WEBAPP_PUBLISH_PROFILE, paste the publish profile contents as the value of the secret.
-#    For instructions on obtaining the publish profile see: https://docs.microsoft.com/azure/app-service/deploy-github-actions#configure-the-github-secret
-#
-# 3. Change the value for the AZURE_WEBAPP_NAME. Optionally, change the AZURE_WEBAPP_PACKAGE_PATH and DOTNET_VERSION environment variables below.
-#
-# For more information on GitHub Actions for Azure: https://github.com/Azure/Actions
-# For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
-
 name: Deploy Vehiculo API to Azure
 
 env:
-  AZURE_WEBAPP_NAME: apijordy    # Cambia esto por el nombre de tu Azure Web App
-  AZURE_WEBAPP_PACKAGE_PATH: 'Vehiculo.API/API'     # Ruta al proyecto API
-  DOTNET_VERSION: '8.0'                  # Versión .NET 8.0 según tu proyecto
+  AZURE_WEBAPP_NAME: apijordy
+  AZURE_WEBAPP_PACKAGE_PATH: 'Vehiculo.API/API'
+  DOTNET_VERSION: '8.0'
 
 on:
   push:
@@ -57,7 +38,7 @@ jobs:
       - name: Restore dependencies
         run: |
           cd "Vehiculo.API"
-          dotnet restore "Abstracciones/Abstracciones.csproj"
+          dotnet restore "Abstraccciones/Abstraccciones.csproj"
           dotnet restore "DA/DA.csproj"
           dotnet restore "Flujo/Flujo.csproj"
           dotnet restore "Reglas/Reglas.csproj"
@@ -67,7 +48,7 @@ jobs:
       - name: Build with dotnet (excluding BD project)
         run: |
           cd "Vehiculo.API"
-          dotnet build "Abstracciones/Abstracciones.csproj" --configuration Release --no-restore
+          dotnet build "Abstraccciones/Abstraccciones.csproj" --configuration Release --no-restore
           dotnet build "DA/DA.csproj" --configuration Release --no-restore
           dotnet build "Flujo/Flujo.csproj" --configuration Release --no-restore
           dotnet build "Reglas/Reglas.csproj" --configuration Release --no-restore
@@ -80,7 +61,8 @@ jobs:
           dotnet test "API/API.csproj" --no-restore --verbosity normal --configuration Release || echo "No tests found or test execution failed"
 
       - name: dotnet publish
-        run: dotnet publish "Vehiculo.API/API/API.csproj" -c Release -o ./publish --no-restore
+        run: |
+          dotnet publish "Vehiculo.API/API/API.csproj" -c Release -o ./publish --no-restore
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -108,6 +90,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_APIAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
           respect-funcignore: true
