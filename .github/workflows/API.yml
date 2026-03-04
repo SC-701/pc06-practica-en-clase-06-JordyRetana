@@ -1,3 +1,11 @@
+# This workflow will build and push a .NET Core app to an Azure Web App when a commit is pushed to your default branch.
+#
+# This workflow assumes you have already created the target Azure App Service web app.
+#
+# 1. Download the Publish Profile for your Azure Web App.
+# 2. Create a secret named AZURE_WEBAPP_PUBLISH_PROFILE in your repository.
+# 3. Change the value for AZURE_WEBAPP_NAME below if needed.
+
 name: Deploy Vehiculo API to Azure
 
 env:
@@ -61,8 +69,7 @@ jobs:
           dotnet test "API/API.csproj" --no-restore --verbosity normal --configuration Release || echo "No tests found or test execution failed"
 
       - name: dotnet publish
-        run: |
-          dotnet publish "Vehiculo.API/API/API.csproj" -c Release -o ./publish --no-restore
+        run: dotnet publish "Vehiculo.API/API/API.csproj" -c Release -o ./publish --no-restore
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
