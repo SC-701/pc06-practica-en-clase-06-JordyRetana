@@ -36,21 +36,32 @@ namespace Web.Pages.Vehiculos
             }
             return Page();
         }
-        public async Task<ActionResult> OnPost(Guid? id)
+        public async Task<IActionResult> OnPost(Guid? id)
         {
-            if (id == Guid.Empty)
+            if (id == null || id == Guid.Empty)
                 return NotFound();
 
-            if (!ModelState.IsValid)
-                return Page();
-
             string endpoint = _configuracion.ObtenerMetodo("ApiEndPoints", "EliminarVehiculo");
-            var cliente = new HttpClient();
-            
-            var solicitud=new HttpRequestMessage(HttpMethod.Delete, string.Format(endpoint, id));
-            var respuesta = await cliente.SendAsync(solicitud);
-            respuesta.EnsureSuccessStatusCode();
-            return RedirectToPage("./Index");
+
+            try
+            {
+                using var cliente = new HttpClient();
+                var solicitud = new HttpRequestMessage(HttpMethod.Delete, string.Format(endpoint, id));
+                var respuesta = await cliente.SendAsync(solicitud);
+
+                if (!respuesta.IsSuccessStatusCode)
+                {
+                    ModelState.AddModelError(string.Empty, "No se pudo eliminar el vehículo.");
+                    return Page();
+                }
+
+                return RedirectToPage("./Index");
+            }
+            catch
+            {
+                ModelState.AddModelError(string.Empty, "Error al intentar eliminar el vehículo.");
+                return Page();
+            }
         }
     }
 }
